@@ -63,8 +63,7 @@ public class UserResource {
         String confirmationLink = "http://localhost:8080/users/confirm?userId=" + user.id + "&code="
                 + user.getConfirmationCode();
         String confirmationMailBody = "Confirm email here: " + confirmationLink;
-        // mailer.send(Mail.withText(user.getEmail(), "Confirmation email",
-        // confirmationMailBody);
+        // mailer.send(Mail.withText(user.getEmail(), "Confirmation email", confirmationMailBody));
         logger.info(confirmationMailBody);
 
         return Response.ok(user).status(201).build();
