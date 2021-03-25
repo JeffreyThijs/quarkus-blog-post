@@ -1,7 +1,12 @@
 package aloxy.test.blog.post;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +34,9 @@ public class User extends PanacheEntity {
     @JsonIgnore
     private boolean confirmed;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<BlogPost> blogPosts = new ArrayList<>();
 
     public User() {
     }
@@ -39,6 +47,15 @@ public class User extends PanacheEntity {
         this.password = password;
         this.email = email;
         this.confirmed = confirmed;
+    }
+
+    public User(String username, String password, String email, boolean confirmed, List<BlogPost> posts) {
+        this.username = username;
+        // this.password = BcryptUtil.bcryptHash(password);
+        this.password = password;
+        this.email = email;
+        this.confirmed = confirmed;
+        this.blogPosts = posts;
     }
 
     public String getUsername() {
@@ -98,6 +115,14 @@ public class User extends PanacheEntity {
         return this;
     }
 
+    public List<BlogPost> getBlogPosts() {
+        return this.blogPosts;
+    }
+
+    public void setBlogPosts(List<BlogPost> posts) {
+        this.blogPosts = posts;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -115,5 +140,15 @@ public class User extends PanacheEntity {
 
     public boolean checkPassword(String password) {
         return password.equals(this.password);
+    }
+
+    public void addBlogPost(BlogPost data) {
+        this.blogPosts.add(data);
+        data.setUser(this);
+    }
+
+    public void removeBlogPost(BlogPost data) {
+        this.blogPosts.remove(data);
+        data.setUser(null);
     }
 }
