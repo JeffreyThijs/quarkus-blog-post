@@ -4,13 +4,18 @@ import java.time.Duration;
 import java.util.Date;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
+import org.jboss.logging.Logger;
 
 import io.smallrye.mutiny.Multi;
 
 @ApplicationScoped
 public class MQTTBlogPostGenerator {
+
+    @Inject
+    Logger logger;
 
     // Just for testing purposes to feed broker with actual messages
 
@@ -25,7 +30,7 @@ public class MQTTBlogPostGenerator {
 
         return Multi.createFrom().ticks().every(Duration.ofSeconds(15)).map(tick -> {
             BlogPostMessage message = new BlogPostMessage(content, 1000000l, new Date());
-            System.out.println("Sending message: " + message.toString());
+            logger.debug("Sending message: " + message.toString());
             return message;
         });
     }

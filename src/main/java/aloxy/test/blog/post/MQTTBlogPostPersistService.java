@@ -10,11 +10,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.jboss.logging.Logger;
 
 import io.smallrye.common.annotation.Blocking;
 
 @ApplicationScoped
 public class MQTTBlogPostPersistService {
+
+    @Inject
+    Logger logger;
 
     @Inject
     ObjectMapper om;
@@ -27,7 +31,7 @@ public class MQTTBlogPostPersistService {
     @Transactional
     public void persist(byte[] blogPostMessageRaw) {
 
-        System.out.println("received: " + new String(blogPostMessageRaw));
+        logger.debug("received: " + new String(blogPostMessageRaw));
         try {
             BlogPostMessage message = om.readValue(new String(blogPostMessageRaw), BlogPostMessage.class);
             User user = User.findById(message.getUserId());

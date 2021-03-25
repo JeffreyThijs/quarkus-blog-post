@@ -3,6 +3,7 @@ package aloxy.test.blog.post;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +14,17 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.jboss.logging.Logger;
+
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
 @Table(name = "known_users")
 public class User extends PanacheEntity {
+
+    @Inject
+    Logger logger;
 
     @NotBlank
     @Column(unique = true)
@@ -135,7 +141,7 @@ public class User extends PanacheEntity {
         this.password = BCrypt.withDefaults().hashToString(12, unencryptedPassword.toCharArray());
         if(!checkPassword(unencryptedPassword)){
             // FIXME: throw a good error here
-            System.out.println("something went wrong");
+            logger.error("something went wrong");
         }
     }
 

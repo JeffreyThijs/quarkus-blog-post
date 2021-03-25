@@ -10,11 +10,15 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
 
 import io.quarkus.scheduler.Scheduled;
 
 @ApplicationScoped
 public class OldBlogPostRemovalService {
+
+    @Inject
+    Logger logger;
 
     @Inject
     EntityManager em;
@@ -49,7 +53,7 @@ public class OldBlogPostRemovalService {
             }
         }
 
-        System.out.println("Removed " + counter + " old blog posts since they were older than " + xHours + " hours!");
+        logger.info("Removed " + counter + " old blog posts since they were older than " + xHours + " hours!");
 
 
         // FIXME: make query that deletes all old posts
