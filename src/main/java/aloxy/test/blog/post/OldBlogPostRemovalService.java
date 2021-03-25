@@ -27,12 +27,19 @@ public class OldBlogPostRemovalService {
         return new Date (date.getTime() - hoursAgo*60*60*1000);
     }
 
+    public Date getDateXSecondsAgo(Long secondsAgo) {
+        Date date = new Date();
+        return new Date (date.getTime() - secondsAgo*1000);
+    }
+
     @Scheduled(every="10s")
     @Transactional  
     void removeOldBlogPosts() {
 
         Long xHours = hourThreshold.orElse(24l);
         Date date = getDateXHoursAgo(xHours);
+        // // for testing:
+        // Date date = getDateXSecondsAgo(xHours);
         List<BlogPost> oldPosts = BlogPost.listAll();
         int counter = 0;
         for(BlogPost bp : oldPosts) {
