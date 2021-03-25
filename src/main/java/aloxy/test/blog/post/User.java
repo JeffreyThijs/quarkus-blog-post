@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.quarkus.elytron.security.common.BcryptUtil;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
@@ -51,7 +51,6 @@ public class User extends PanacheEntity {
 
     public User(String username, String password, String email, boolean confirmed, List<BlogPost> posts) {
         this.username = username;
-        // this.password = BcryptUtil.bcryptHash(password);
         this.password = password;
         this.email = email;
         this.confirmed = confirmed;
@@ -71,7 +70,6 @@ public class User extends PanacheEntity {
     }
 
     public void setPassword(String password) {
-        // this.password = BcryptUtil.bcryptHash(password);
         this.password = password;
     }
 
@@ -100,11 +98,6 @@ public class User extends PanacheEntity {
         return this;
     }
 
-    public User password(String password) {
-        setPassword(password);
-        return this;
-    }
-
     public User email(String email) {
         setEmail(email);
         return this;
@@ -125,21 +118,25 @@ public class User extends PanacheEntity {
 
     @Override
     public String toString() {
-        return "{" +
-            " username='" + getUsername() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", confirmed='" + isConfirmed() + "'" +
-            "}";
+        return "{" + " username='" + getUsername() + "'" + ", password='" + getPassword() + "'" + ", email='"
+                + getEmail() + "'" + ", confirmed='" + isConfirmed() + "'" + "}";
     }
 
-
-    public static User findByUsername(String username){
+    public static User findByUsername(String username) {
         return find("username", username).firstResult();
     }
 
     public boolean checkPassword(String password) {
-        return password.equals(this.password);
+        return BCrypt.verifyer().verify(password.toCharArray(), this.password).verified;
+    }
+
+    public void encryptPassword() {
+        String unencryptedPassword = this.password;
+        this.password = BCrypt.withDefaults().hashToString(12, unencryptedPassword.toCharArray());
+        if(!checkPassword(unencryptedPassword)){
+            // FIXME: throw a good error here
+            System.out.println("something went wrong");
+        }
     }
 
     public void addBlogPost(BlogPost data) {
