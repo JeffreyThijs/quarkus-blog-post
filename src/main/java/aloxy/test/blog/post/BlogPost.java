@@ -40,6 +40,11 @@ public class BlogPost extends PanacheEntity {
         this.timestamp = new Date();
     }
 
+    public BlogPost(String content, Date date) {
+        this.content = content;
+        this.timestamp = date;
+    }
+
     public String getContent() {
         return this.content;
     }
