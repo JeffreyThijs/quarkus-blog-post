@@ -21,6 +21,5 @@ jobs:
         with:
           push: true # Will only build if this is not here
           tags: |
-            ghcr.io/${{ secrets.REPO_NAME }}:${{ github.ref }}
             ghcr.io/${{ secrets.REPO_NAME }}:latest
 
