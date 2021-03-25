@@ -1,14 +1,19 @@
 package aloxy.test.blog.post;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
@@ -23,11 +28,16 @@ public class BlogPost extends PanacheEntity {
     @JsonIgnore
     private User user;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
+    private Date timestamp = new Date();
+
     public BlogPost() {
     }
 
     public BlogPost(String content) {
         this.content = content;
+        this.timestamp = new Date();
     }
 
     public String getContent() {
@@ -43,12 +53,22 @@ public class BlogPost extends PanacheEntity {
         return this;
     }
 
+    @JsonProperty
     public User getUser() {
         return this.user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @JsonProperty
+    public Date getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override
@@ -69,7 +89,12 @@ public class BlogPost extends PanacheEntity {
 
     @Override
     public String toString() {
-        return "{" + " content='" + getContent() + "'" + "}";
+        return "{" + " content='" + getContent() + "'" + ", timestamp='" + getTimestamp() + "'" + "}";
+    }
+
+    public static List<BlogPost> getBlogPostsSinceDate(Date date) {
+        return find("select distinct bp FROM BlogPost bp where timestamp > ?1", date).firstResult(); 
+        
     }
 
 }
