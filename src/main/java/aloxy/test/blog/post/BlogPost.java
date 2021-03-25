@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
@@ -16,8 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.panache.common.Parameters;
 
 @Entity
+// @NamedQuery(name = "BlogPost.getByContent", query = "from BlogPost where content = :content")
 public class BlogPost extends PanacheEntity {
 
     @NotBlank
@@ -97,9 +100,12 @@ public class BlogPost extends PanacheEntity {
         return "{" + " content='" + getContent() + "'" + ", timestamp='" + getTimestamp() + "'" + "}";
     }
 
-    public static List<BlogPost> getBlogPostsSinceDate(Date date) {
-        return find("select distinct bp FROM BlogPost bp where timestamp > ?1", date).firstResult(); 
-        
+    public static List<BlogPost> findAllSinceDate(Date date){
+        return find("timestamp between :date and :now", Parameters.with("date", date).and("now", new Date())).list();
+    }
+
+    public static void deleteAllBeforeDate(Date date){
+        delete("timestamp < :date", Parameters.with("date", date));
     }
 
 }

@@ -18,36 +18,38 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
-
 @Path("/posts")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BlogPostResource {
 
-    @Inject @Channel("http-new-blog-post")
+    // In real world applications -> secure endpoints with cookie/bearer token, etc
+
+    @Inject
+    @Channel("http-new-blog-post")
     Emitter<BlogPostMessage> emitter;
 
     @GET
-    public List<BlogPost> getAllBlogPosts(){
+    public List<BlogPost> getAllBlogPosts() {
         return BlogPost.listAll();
     }
 
     @GET
     @Path("{userId}")
-    public List<BlogPost> getAllUserBlogPosts(@QueryParam("userId") Long userId){
+    public List<BlogPost> getAllUserBlogPosts(@QueryParam("userId") Long userId) {
         User user = User.findById(userId);
-        if ( user == null) {
+        if (user == null) {
             return new ArrayList<>();
         }
         return user.getBlogPosts();
     }
-    
+
     @POST
     @Path("{userId}")
     @Transactional
     public Response addBlogPost(@QueryParam("userId") Long userId, @Valid BlogPost post) {
         User user = User.findById(userId);
-        if ( user == null) {
+        if (user == null) {
             return Response.ok("User with id: " + userId + " not found!").status(404).build();
         }
         post.id = null;
