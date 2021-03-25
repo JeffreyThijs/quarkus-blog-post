@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
@@ -34,6 +35,7 @@ public class User extends PanacheEntity {
 
     public User(String username, String password, String email, boolean confirmed) {
         this.username = username;
+        // this.password = BcryptUtil.bcryptHash(password);
         this.password = password;
         this.email = email;
         this.confirmed = confirmed;
@@ -52,6 +54,7 @@ public class User extends PanacheEntity {
     }
 
     public void setPassword(String password) {
+        // this.password = BcryptUtil.bcryptHash(password);
         this.password = password;
     }
 
@@ -111,6 +114,6 @@ public class User extends PanacheEntity {
     }
 
     public boolean checkPassword(String password) {
-        return true;
+        return password.equals(this.password);
     }
 }

@@ -35,6 +35,7 @@ public class UserResource {
     @POST
     @Path("/login")
     public Response login(@Valid User user) {
+        
         User userDB = User.findByUsername(user.getUsername());
         if (userDB == null) {
             return Response.ok("No user found").status(404).build();

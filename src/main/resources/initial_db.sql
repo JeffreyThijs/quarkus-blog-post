@@ -1,1 +1,1 @@
-INSERT INTO known_users(id, username, password, confirmed, email) VALUES(1, 'jthijs', 'jthijs', true, 'jeffrey.thijs@hotmail.com');
+INSERT INTO known_users(id, username, password, confirmed, email) VALUES(1000000, 'jthijs', 'jthijs', true, 'jeffrey.thijs@hotmail.com');
