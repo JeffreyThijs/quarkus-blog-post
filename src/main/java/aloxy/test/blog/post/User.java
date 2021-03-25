@@ -2,6 +2,7 @@ package aloxy.test.blog.post;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.jboss.logging.Logger;
 
@@ -24,6 +26,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class User extends PanacheEntity {
 
     @Inject
+    @JsonIgnore
     Logger logger;
 
     @NotBlank
@@ -31,6 +34,7 @@ public class User extends PanacheEntity {
     private String username;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @Email
@@ -44,12 +48,14 @@ public class User extends PanacheEntity {
     @JsonIgnore
     private List<BlogPost> blogPosts = new ArrayList<>();
 
+    @JsonIgnore
+    private String confirmationCode;
+
     public User() {
     }
 
     public User(String username, String password, String email, boolean confirmed) {
         this.username = username;
-        // this.password = BcryptUtil.bcryptHash(password);
         this.password = password;
         this.email = email;
         this.confirmed = confirmed;
@@ -71,10 +77,12 @@ public class User extends PanacheEntity {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -122,6 +130,24 @@ public class User extends PanacheEntity {
         this.blogPosts = posts;
     }
 
+
+    public Logger getLogger() {
+        return this.logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public String getConfirmationCode() {
+        return this.confirmationCode;
+    }
+
+    public void setConfirmationCode(String confirmationCode) {
+        this.confirmationCode = confirmationCode;
+    }
+
+
     @Override
     public String toString() {
         return "{" + " username='" + getUsername() + "'" + ", password='" + getPassword() + "'" + ", email='"
@@ -153,5 +179,9 @@ public class User extends PanacheEntity {
     public void removeBlogPost(BlogPost data) {
         this.blogPosts.remove(data);
         data.setUser(null);
+    }
+
+    public void generateConfirmationCode() {
+        this.confirmationCode = UUID.randomUUID().toString();
     }
 }
