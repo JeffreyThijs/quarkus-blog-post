@@ -22,4 +22,6 @@ jobs:
           push: true # Will only build if this is not here
           tags: |
             ghcr.io/${{ secrets.REPO_NAME }}:latest
+          context: src/main/docker
+          file: Dockerfile.jvm
 
