@@ -2,7 +2,6 @@ package aloxy.test.blog.post;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -22,7 +21,7 @@ public class User extends PanacheEntity {
     @NotBlank
     private String password;
 
-    @NotBlank
+    @Email
     @Column(unique = true)
     private String email;
 
