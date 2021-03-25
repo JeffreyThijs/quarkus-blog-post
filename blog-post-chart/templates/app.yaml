@@ -4,8 +4,8 @@ kind: Service
 metadata:
   annotations:
     app.quarkus.io/vcs-url: https://github.com/JeffreyThijs/quarkus-blog-post.git
-    app.quarkus.io/build-timestamp: 2021-03-25 - 13:15:00 +0000
-    app.quarkus.io/commit-id: 1554b2ea7b1124e35b18a3cea6a97965bc618bc2
+    app.quarkus.io/build-timestamp: 2021-03-25 - 17:33:16 +0000
+    app.quarkus.io/commit-id: 86bf3728cc9fc5d6a5dcacf165586b3f616571a9
   labels:
     app.kubernetes.io/name: quarkus-blog-post
     app.kubernetes.io/part-of: quarkus-blog-post
@@ -28,8 +28,8 @@ kind: Deployment
 metadata:
   annotations:
     app.quarkus.io/vcs-url: https://github.com/JeffreyThijs/quarkus-blog-post.git
-    app.quarkus.io/build-timestamp: 2021-03-25 - 13:15:00 +0000
-    app.quarkus.io/commit-id: 1554b2ea7b1124e35b18a3cea6a97965bc618bc2
+    app.quarkus.io/build-timestamp: 2021-03-25 - 17:33:16 +0000
+    app.quarkus.io/commit-id: 86bf3728cc9fc5d6a5dcacf165586b3f616571a9
   labels:
     app.kubernetes.io/name: quarkus-blog-post
     app.kubernetes.io/part-of: quarkus-blog-post
@@ -46,8 +46,8 @@ spec:
     metadata:
       annotations:
         app.quarkus.io/vcs-url: https://github.com/JeffreyThijs/quarkus-blog-post.git
-        app.quarkus.io/build-timestamp: 2021-03-25 - 13:15:00 +0000
-        app.quarkus.io/commit-id: 1554b2ea7b1124e35b18a3cea6a97965bc618bc2
+        app.quarkus.io/build-timestamp: 2021-03-25 - 17:33:16 +0000
+        app.quarkus.io/commit-id: 86bf3728cc9fc5d6a5dcacf165586b3f616571a9
       labels:
         app.kubernetes.io/name: quarkus-blog-post
         app.kubernetes.io/part-of: quarkus-blog-post
